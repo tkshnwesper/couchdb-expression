@@ -1,9 +1,9 @@
 {
-  "name": "couchdb-session",
+  "name": "couchdb-expression",
   "version": "1.0.0",
-  "description": "For session store using CouchDB",
-  "main": "index.js",
-  "repository": "sdsd",
+  "description": "Express Session Store for CouchDB",
+  "main": "lib/index.js",
+  "repository": "https://github.com/tkshnwesper/couchdb-expression",
   "author": "Saurabh M. Machave",
   "license": "MIT",
   "scripts": {
