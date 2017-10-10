@@ -130,6 +130,12 @@ export default session => {
         });
       });
     }
+
+    length(callback) {
+      this.execute(db => (
+        db.list((err, body) => callback(err, body.rows.length))
+      ));
+    }
   }
 
   return CouchDBStore;
