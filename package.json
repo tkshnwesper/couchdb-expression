@@ -1,6 +1,6 @@
 {
   "name": "couchdb-expression",
-  "version": "1.0.0",
+  "version": "1.0.1-0",
   "description": "Express Session Store for CouchDB",
   "main": "lib/index.js",
   "repository": "https://github.com/tkshnwesper/couchdb-expression",
