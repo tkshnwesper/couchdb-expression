@@ -10,7 +10,8 @@
     "build": "babel src -d lib",
     "execute": "node lib/index.js",
     "start": "nodemon --exec yarn start-stub",
-    "start-stub": "run-s build execute"
+    "start-stub": "run-s build execute",
+    "postinstall": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
