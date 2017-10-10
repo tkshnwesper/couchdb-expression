@@ -17,6 +17,8 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "nodemon": "^1.12.1",
     "npm-run-all": "^4.1.1"
   },
