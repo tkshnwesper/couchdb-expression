@@ -1,0 +1,13 @@
+services:
+  - docker
+
+language: node_js
+node_js:
+  - "node"
+
+before_install:
+  - docker pull couchdb
+  - docker run -p 5984:5984 -d couchdb
+
+after_script:
+  - npm run coverage
