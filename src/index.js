@@ -125,15 +125,30 @@ export default session => {
           body.rows.forEach(doc => (
             docs.push({ ...doc.doc, _deleted: true })
           ));
-          console.log(docs);
           db.bulk({ docs }, callback);
         });
       });
     }
 
+    /**
+     * Gets the number of documents in the DB
+     * @param {function} callback 
+     */
     length(callback) {
       this.execute(db => (
         db.list((err, body) => callback(err, body.rows.length))
+      ));
+    }
+
+    /**
+     * Gets all the documents in the DB
+     * @param {function} callback 
+     */
+    all(callback) {
+      this.execute(db => (
+        db.list({ include_docs: true }, (err, body) => (
+          callback(err, body.rows.map(r => r.doc)))
+        )
       ));
     }
   }
