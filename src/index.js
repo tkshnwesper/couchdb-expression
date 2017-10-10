@@ -46,7 +46,7 @@ export default session => {
            * Gets a list of databases existing on the CouchDB Server
            */
           this.connection.db.list((err, body) => {
-            if (!body.includes(this.databaseName)) {
+            if (body.indexOf(this.databaseName) === -1) {
               /**
                * Creates a new database only if it doesn't already exist
                */
