@@ -151,6 +151,22 @@ export default session => {
         )
       ));
     }
+
+    touch(sid, session, callback) {
+      this.execute(db => {
+        db.insert({
+          ...session,
+          cookie: {
+            ...session.cookie,
+            expires: (
+              session.expires && session.maxAge ?
+              new Date(new Date().getTime() + session.maxAge) :
+              session.expires
+            )
+          }
+        })
+      })
+    }
   }
 
   return CouchDBStore;
