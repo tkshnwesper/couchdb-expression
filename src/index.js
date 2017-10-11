@@ -89,7 +89,13 @@ export default session => {
      */
     get(sid, callback) {
       this.execute(db => {
-        db.get(sid, (err, doc) => callback(err, doc ? doc : null));
+        db.get(sid, (err, doc) => {
+          if (err) {
+            console.log('Attempt to get cookie information from DB failed.');
+            console.log(err);
+          }
+          callback(err, doc ? doc : null);
+        });
       });
     }
 
@@ -100,7 +106,13 @@ export default session => {
      * @param {function} callback
      */
     set(sid, session, callback) {
-      this.execute(db => this.database.insert(session, sid, callback));
+      this.execute(db => this.database.insert(session, sid, (err) => {
+        if (err) {
+          console.log('Attempt to set cookie in DB failed.');
+          console.log(err);
+        }
+        callback(err);
+      }));
     }
 
     /**
@@ -110,7 +122,13 @@ export default session => {
      */
     destroy(sid, callback) {
       this.get(sid, (err, doc) => (
-        this.execute(db => db.destroy(sid, doc._rev, callback))
+        this.execute(db => db.destroy(sid, doc._rev, (err2) => {
+          if (err2) {
+            console.log('Attempt to destroy the cookie in DB failed.');
+            console.log(err2);
+          }
+          callback(err2);
+        }))
       ));
     }
 
@@ -122,10 +140,22 @@ export default session => {
       this.execute(db => {
         const docs = [];
         db.list({ include_docs: true }, (err, body) => {
-          body.rows.forEach(doc => (
-            docs.push({ ...doc.doc, _deleted: true })
-          ));
-          db.bulk({ docs }, callback);
+          if (err) {
+            console.log('Attempt to fetch list of all the cookies failed (in clear method).');
+            console.log(err);
+            callback(err);
+          } else {
+            body.rows.forEach(doc => (
+              docs.push({ ...doc.doc, _deleted: true })
+            ));
+            db.bulk({ docs }, (err) => {
+              if (err) {
+                console.log('Attempt to carry out bulk deletion of cookies in DB failed (in clear method).');
+                console.log(err);
+              }
+              callback(err);
+            });
+          }
         });
       });
     }
@@ -136,7 +166,15 @@ export default session => {
      */
     length(callback) {
       this.execute(db => (
-        db.list((err, body) => callback(err, body.rows.length))
+        db.list((err, body) => {
+          if (err) {
+            console.log('Attempt to fetch the list of all cookies from DB failed (in length method).');
+            console.log(err);
+            callback(err, null);
+          } else {
+            callback(err, body.rows.length);
+          }
+        })
       ));
     }
 
@@ -146,12 +184,24 @@ export default session => {
      */
     all(callback) {
       this.execute(db => (
-        db.list({ include_docs: true }, (err, body) => (
-          callback(err, body.rows.map(r => r.doc)))
-        )
+        db.list({ include_docs: true }, (err, body) => {
+          if (err) {
+            console.log('Attempt to fetch all cookies from DB failed (in all method).');
+            console.log(err);
+            callback(err, null);
+          } else {
+            callback(err, body.rows.map(r => r.doc));
+          }
+        })
       ));
     }
 
+    /**
+     * 
+     * @param {string} sid 
+     * @param {object} session 
+     * @param {function} callback 
+     */
     touch(sid, session, callback) {
       this.execute(db => {
         db.insert({
@@ -164,8 +214,14 @@ export default session => {
               session.expires
             )
           }
-        })
-      })
+        }, (err) => {
+          if (err) {
+            console.log('Attempt to touch failed.');
+            console.log(err);
+          }
+          callback(err);
+        });
+      });
     }
   }
 
