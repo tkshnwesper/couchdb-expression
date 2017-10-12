@@ -6,19 +6,22 @@ yarn add couchdb-expression
 ## Usage
 A sample program:
 ```js
-const express = require('express');
-const session = require('express-session');
-const couchDBExpression = require('couchdb-expression').default(session);
+import express from 'express';
+import session from 'express-session';
+import Expression from 'couchdb-expression');
 
-const s = new couchDBExpression({
-  username: 'root',
-  password: 'hello123'
+const store = new Expression({
+  username: 'root',         // default value = ''
+  password: 'hello123',     // default value = ''
+  hostname: 'localhost',    // default value = 'localhost'
+  port: '5984',             // default value = 5984
+  databaseName: 'sessions'  // default value = 'sessions'
 });
 
 const app = express();
 
 app.use(session({
-  store: s,
+  store: store,
   secret: 'meow',
   cookie: {
     maxAge: 3000,
