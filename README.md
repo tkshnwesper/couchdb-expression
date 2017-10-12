@@ -8,7 +8,7 @@ A sample program:
 ```js
 import express from 'express';
 import session from 'express-session';
-import Expression from 'couchdb-expression');
+import Expression from 'couchdb-expression';
 
 const store = new Expression({
   username: 'root',         // default value = ''
