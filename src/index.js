@@ -41,27 +41,37 @@ export default session => {
       );
 
       async function initializeDatabase() {
-        const db = await new Promise(resolve => {
+        const db = await new Promise((resolve, reject) => {
           /**
            * Gets a list of databases existing on the CouchDB Server
            */
           this.connection.db.list((err, body) => {
-            if (body.indexOf(this.databaseName) === -1) {
-              /**
-               * Creates a new database only if it doesn't already exist
-               */
-              this.connection.db.create(this.databaseName, (err) => {
-                if (err) throw `Error while creating the database.\n${err}`;
-                /**
-                 * Resolves the DB once it has been created
-                 */
-                resolve(this.connection.db.use(this.databaseName));  
-              });
+            if (err) {
+              console.log('Error connecting to the database and fetching DB list. Check credentials.');
+              console.log(err);
+              reject(err);
             } else {
-              /**
-               * If already exists then it resolves it right away
-               */
-              resolve(this.connection.db.use(this.databaseName));
+              if (body.indexOf(this.databaseName) === -1) {
+                /**
+                 * Creates a new database only if it doesn't already exist
+                 */
+                this.connection.db.create(this.databaseName, (err) => {
+                  if (err) {
+                    console.log('Error while creating the database.');
+                    console.log(err);
+                    reject(err);
+                  }
+                  /**
+                   * Resolves the DB once it has been created
+                   */
+                  resolve(this.connection.db.use(this.databaseName));  
+                });
+              } else {
+                /**
+                 * If already exists then it resolves it right away
+                 */
+                resolve(this.connection.db.use(this.databaseName));
+              }
             }
           });
         });
