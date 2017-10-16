@@ -116,7 +116,7 @@ export default session => {
      * @param {function} callback
      */
     set(sid, session, callback) {
-      this.execute(db => this.database.insert(session, sid, (err) => {
+      this.execute(db => db.insert(session, sid, (err) => {
         if (err) {
           console.log('Attempt to set cookie in DB failed.');
           console.log(err);
