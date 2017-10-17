@@ -82,6 +82,17 @@ export default session => {
     }
 
     /**
+     * Converts session_id to a CouchDB _id
+     */
+    sidToCid = sid => `c${sid}`
+
+    /**
+     * Converts CouchDB _id to session_id
+     */
+    cidToSid = cid => cid.slice(1);
+
+
+    /**
      * Gets a proper instance of DB to perform actions
      * @param {function} fn
      */
@@ -99,7 +110,7 @@ export default session => {
      */
     get(sid, callback) {
       this.execute(db => {
-        db.get(sid, (err, doc) => {
+        db.get(this.sidToCid(sid), (err, doc) => {
           if (err) {
             console.log('Attempt to get cookie information from DB failed.');
             console.log(err);
@@ -117,18 +128,22 @@ export default session => {
      */
     set(sid, session, callback) {
       this.execute(db => (
-        db.get(sid, (err, doc) => {
-          if (!err) {
-            session = { ...session, _rev: doc._rev };
+        // db.get(sid, (err, doc) => {
+        //   if (!err) {
+        //     session = { ...session, _rev: doc._rev };
+        //   }
+        /**
+         * Prepending `c` to _id because _id fields are not allowed to start
+         * with an underscore.
+         */
+        db.insert(session, this.sidToCid(sid), (err) => {
+          if (err) {
+            console.log('Attempt to set cookie in DB failed.');
+            console.log(err);
           }
-          db.insert(session, sid, (err) => {
-            if (err) {
-              console.log('Attempt to set cookie in DB failed.');
-              console.log(err);
-            }
-            callback(err);
-          });
+          callback(err);
         })
+        // })
       ));
     }
 
