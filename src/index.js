@@ -84,12 +84,12 @@ export default session => {
     /**
      * Converts session_id to a CouchDB _id
      */
-    sidToCid = sid => `c${sid}`
+    sidToCid (sid) { `c${sid}`; }
 
     /**
      * Converts CouchDB _id to session_id
      */
-    cidToSid = cid => cid.slice(1);
+    cidToSid (cid) { cid.slice(1); }
 
 
     /**
