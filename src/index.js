@@ -87,12 +87,6 @@ export default session => {
     sidToCid (sid) { return `c${sid}`; }
 
     /**
-     * Converts CouchDB _id to session_id
-     */
-    cidToSid (cid) { return cid.slice(1); }
-
-
-    /**
      * Gets a proper instance of DB to perform actions
      * @param {function} fn
      */
@@ -128,10 +122,6 @@ export default session => {
      */
     set(sid, session, callback) {
       this.execute(db => (
-        // db.get(sid, (err, doc) => {
-        //   if (!err) {
-        //     session = { ...session, _rev: doc._rev };
-        //   }
         /**
          * Prepending `c` to _id because _id fields are not allowed to start
          * with an underscore.
@@ -143,7 +133,6 @@ export default session => {
           }
           callback(err);
         })
-        // })
       ));
     }
 
