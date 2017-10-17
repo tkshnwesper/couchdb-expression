@@ -29,7 +29,8 @@ export default session => {
       this.username       = options.username    || '';
       this.password       = options.password    || '';
       this.databaseName   = options.database    || 'sessions';
-      // this.collectionName = options.collection  || 'sessions';
+      
+      this.setErrorCount = 0;
 
       this.connection = nano(
         /**
@@ -127,11 +128,23 @@ export default session => {
          * with an underscore.
          */
         db.insert(session, this.sidToCid(sid), (err) => {
-          if (err) {
+          if (err && this.setErrorCount < 3) {
+            this.setErrorCount++;
             console.log('Attempt to set cookie in DB failed.');
             console.log(err);
+            /**
+             * Sometimes due to race-conditions a `Document update conflict`
+             * error seems to crop up. This has got to do with CouchDB's internal
+             * handling of document updates, and the way to solve this is by
+             * literally trying again.
+             */
+            this.get(sid, (err, doc) => {
+              this.set(sid, { ...session, _rev: doc._rev }, callback);
+            });
+          } else {
+            this.setErrorCount = 0;
+            callback(err);
           }
-          callback(err);
         })
       ));
     }
