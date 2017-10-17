@@ -14,7 +14,7 @@ export default session => {
     /**
      * constructor for the CouchDBStore Class
      * Options get added to it
-     * PouchDB instance gets initialized
+     * nano instance gets initialized
      * @constructor
      * @param {object} options
      */
@@ -84,6 +84,8 @@ export default session => {
 
     /**
      * Converts session_id to a CouchDB _id
+     * @param {string} sid
+     * @return {string}
      */
     sidToCid (sid) { return `c${sid}`; }
 
@@ -138,9 +140,9 @@ export default session => {
              * handling of document updates, and the way to solve this is by
              * literally trying again.
              */
-            this.get(sid, (err, doc) => {
-              this.set(sid, { ...session, _rev: doc._rev }, callback);
-            });
+            this.get(sid, (err, doc) => (
+              this.set(sid, { ...session, _rev: doc._rev }, callback)
+            ));
           } else {
             this.setErrorCount = 0;
             callback(err);
