@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "test": "mocha",
-    "build": "npx babel src --out-dir lib"
+    "build": "babel src --out-dir lib"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
