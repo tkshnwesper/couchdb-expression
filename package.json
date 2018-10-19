@@ -7,30 +7,21 @@
   "author": "Saurabh M. Machave",
   "license": "MIT",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "npx babel src --out-dir lib",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
     "chai": "^4.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.4"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*"
-    ]
+    "@babel/preset-env": "^7.1.0"
   },
   "dependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/register": "^7.0.0",
     "debug": "^4.1.0",
-    "eslint": "^5.7.0",
     "nano": "^7.1.0"
-  },
-  "peerDependencies": {
-    "eslint": ">=4.12.1"
   }
 }
