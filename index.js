@@ -1,3 +1,3 @@
-const session = require('./src/lib').default;
+const session = require('./lib/lib').default;
 
 module.exports = session;
