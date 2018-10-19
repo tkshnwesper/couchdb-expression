@@ -15,7 +15,6 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mocha": "^5.2.0",
-    "nano": "^7.1.0",
     "nodemon": "^1.18.4"
   },
   "nodemonConfig": {
@@ -24,10 +23,14 @@
     ]
   },
   "dependencies": {
+    "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
-    "@babel/core": "^7.1.2",
     "debug": "^4.1.0",
+    "eslint": "^5.7.0",
     "nano": "^7.1.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=4.12.1"
   }
 }
