@@ -4,8 +4,8 @@ const Expression = require('../src/lib').default(session);
 const chai = require('chai');
 const nano = require('nano');
 
-const USERNAME = 'admin';
-const PASSWORD = 'admin';
+const USERNAME = '';
+const PASSWORD = '';
 const HOSTNAME = 'localhost';
 const PORT = 5984;
 const DATABASE_NAME = 'test';
