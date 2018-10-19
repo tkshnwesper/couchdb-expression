@@ -2,25 +2,21 @@
   "name": "couchdb-expression",
   "version": "1.2.2",
   "description": "Express Session Store for CouchDB",
-  "main": "lib/index.js",
+  "main": "index.js",
   "repository": "https://github.com/tkshnwesper/couchdb-expression",
   "author": "Saurabh M. Machave",
   "license": "MIT",
   "scripts": {
-    "build": "babel src -d lib",
-    "execute": "node lib/index.js",
-    "start": "nodemon --exec yarn start-stub",
-    "start-stub": "run-s build execute"
+    "test": "mocha"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "express": "^4.16.2",
+    "babel-eslint": "^10.0.1",
+    "chai": "^4.2.0",
+    "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "nodemon": "^1.12.1",
-    "npm-run-all": "^4.1.1"
+    "mocha": "^5.2.0",
+    "nano": "^7.1.0",
+    "nodemon": "^1.18.4"
   },
   "nodemonConfig": {
     "ignore": [
@@ -28,6 +24,10 @@
     ]
   },
   "dependencies": {
-    "nano": "^6.4.2"
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "@babel/core": "^7.1.2",
+    "debug": "^4.1.0",
+    "nano": "^7.1.0"
   }
 }

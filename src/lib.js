@@ -1,7 +1,10 @@
-import "babel-polyfill";
 import nano from 'nano';
+import debug from 'debug';
 
-export default session => {
+const info = debug('info');
+const error = debug('error');
+
+export default (session) => {
 
   session = session || {};
 
@@ -48,8 +51,8 @@ export default session => {
            */
           this.connection.db.list((err, body) => {
             if (err) {
-              console.log('Error connecting to the database and fetching DB list. Check credentials.');
-              console.log(err);
+              info('Error connecting to the database and fetching DB list. Check credentials.');
+              error(err);
               reject(err);
             } else {
               if (body.indexOf(this.databaseName) === -1) {
@@ -58,8 +61,8 @@ export default session => {
                  */
                 this.connection.db.create(this.databaseName, (err) => {
                   if (err) {
-                    console.log('Error while creating the database.');
-                    console.log(err);
+                    info('Error while creating the database.');
+                    error(err);
                     reject(err);
                   }
                   /**
@@ -95,9 +98,9 @@ export default session => {
      */
     execute(fn) {
       this.database ?
-      fn(this.database) :
-      this.dbPromise.then(db => fn(db))
-    };
+        fn(this.database) :
+        this.dbPromise.then(db => fn(db));
+    }
 
     /**
      * Returns a session
@@ -109,8 +112,8 @@ export default session => {
       this.execute(db => {
         db.get(this.sidToCid(sid), (err, doc) => {
           if (err) {
-            console.log('Attempt to get cookie information from DB failed.');
-            console.log(err);
+            info('Attempt to get cookie information from DB failed.');
+            error(err);
           }
           callback(err, doc ? doc : null);
         });
@@ -132,8 +135,8 @@ export default session => {
         db.insert(session, this.sidToCid(sid), (err) => {
           if (err && this.setErrorCount < 3) {
             this.setErrorCount++;
-            console.log('Attempt to set cookie in DB failed.');
-            console.log(err);
+            info('Attempt to set cookie in DB failed.');
+            error(err);
             /**
              * Sometimes due to race-conditions a `Document update conflict`
              * error seems to crop up. This has got to do with CouchDB's internal
@@ -158,10 +161,10 @@ export default session => {
      */
     destroy(sid, callback) {
       this.get(sid, (err, doc) => (
-        this.execute(db => db.destroy(sid, doc._rev, (err2) => {
+        this.execute(db => db.destroy(doc._id, doc._rev, (err2) => {
           if (err2) {
-            console.log('Attempt to destroy the cookie in DB failed.');
-            console.log(err2);
+            info('Attempt to destroy the cookie in DB failed.');
+            error(err2);
           }
           callback(err2);
         }))
@@ -177,8 +180,8 @@ export default session => {
         const docs = [];
         db.list({ include_docs: true }, (err, body) => {
           if (err) {
-            console.log('Attempt to fetch list of all the cookies failed (in clear method).');
-            console.log(err);
+            info('Attempt to fetch list of all the cookies failed (in clear method).');
+            error(err);
             callback(err);
           } else {
             body.rows.forEach(doc => (
@@ -186,8 +189,8 @@ export default session => {
             ));
             db.bulk({ docs }, (err) => {
               if (err) {
-                console.log('Attempt to carry out bulk deletion of cookies in DB failed (in clear method).');
-                console.log(err);
+                info('Attempt to carry out bulk deletion of cookies in DB failed (in clear method).');
+                error(err);
               }
               callback(err);
             });
@@ -204,8 +207,8 @@ export default session => {
       this.execute(db => (
         db.list((err, body) => {
           if (err) {
-            console.log('Attempt to fetch the list of all cookies from DB failed (in length method).');
-            console.log(err);
+            info('Attempt to fetch the list of all cookies from DB failed (in length method).');
+            error(err);
             callback(err, null);
           } else {
             callback(err, body.rows.length);
@@ -222,8 +225,8 @@ export default session => {
       this.execute(db => (
         db.list({ include_docs: true }, (err, body) => {
           if (err) {
-            console.log('Attempt to fetch all cookies from DB failed (in all method).');
-            console.log(err);
+            info('Attempt to fetch all cookies from DB failed (in all method).');
+            error(err);
             callback(err, null);
           } else {
             callback(err, body.rows.map(r => r.doc));
@@ -246,14 +249,14 @@ export default session => {
             ...session.cookie,
             expires: (
               session.expires && session.maxAge ?
-              new Date(new Date().getTime() + session.maxAge) :
-              session.expires
+                new Date(new Date().getTime() + session.maxAge) :
+                session.expires
             )
           }
         }, (err) => {
           if (err) {
-            console.log('Attempt to touch failed.');
-            console.log(err);
+            info('Attempt to touch failed.');
+            error(err);
           }
           callback(err);
         });
@@ -262,4 +265,4 @@ export default session => {
   }
 
   return CouchDBStore;
-}
+};
