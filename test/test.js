@@ -1,6 +1,6 @@
 require('@babel/register');
 const session = require('express-session');
-const Expression = require('../index')(session);
+const Expression = require('../src/lib').default(session);
 const chai = require('chai');
 const nano = require('nano');
 

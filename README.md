@@ -1,5 +1,7 @@
 # couchdb-expression
 
+[![Waffle.io - Issues in progress](https://badge.waffle.io/tkshnwesper/couchdb-expression.png?label=in%20progress&title=In%20Progress)](http://waffle.io/tkshnwesper/couchdb-expression)
+
 ## Installing
 
 ```sh

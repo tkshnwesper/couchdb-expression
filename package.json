@@ -7,8 +7,9 @@
   "author": "Saurabh M. Machave",
   "license": "MIT",
   "scripts": {
-    "test": "mocha",
-    "build": "babel src --out-dir lib"
+    "test": "nyc --reporter=lcov mocha",
+    "build": "babel src --out-dir lib",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -16,9 +17,12 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^13.1.0"
   },
   "dependencies": {
     "debug": "^4.1.0",
