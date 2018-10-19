@@ -13,7 +13,7 @@ A sample program:
 ```js
 const express = require('express');
 const session = require('express-session');
-const Expression = require('../index')(session);
+const Expression = require('couchdb-expression')(session);
 
 const store = new Expression({
   username: 'root',         // default value = ''
