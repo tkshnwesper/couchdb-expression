@@ -6,7 +6,7 @@ const nano = require('nano');
 
 const USERNAME = '';
 const PASSWORD = '';
-const HOSTNAME = 'localhost';
+const HOSTNAME = '127.0.0.1';
 const PORT = 5984;
 const DATABASE_NAME = 'test';
 
