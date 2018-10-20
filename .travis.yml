@@ -1,9 +1,13 @@
 services:
-  - couchdb
+  - docker
 
 language: node_js
 node_js:
   - "node"
 
-before_script:
-  - curl -X PUT http://127.0.0.1:5984/_node/nonode@nohost/_config/admins/meow -d "password"
+# before_script:
+#   - curl -X PUT http://127.0.0.1:5984/_node/nonode@nohost/_config/admins/meow -d "password"
+
+before_install:
+  - docker pull couchdb
+  - docker run -p 5984:5984 couchdb
