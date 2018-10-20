@@ -4,3 +4,6 @@ services:
 language: node_js
 node_js:
   - "node"
+
+before_script:
+  - curl -X PUT /_node/nonode@nohost/_config/admins/meow -d password
