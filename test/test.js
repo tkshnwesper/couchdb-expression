@@ -25,7 +25,7 @@ const createAdminUser = async () => {
 };
 
 before(async () => {
-  await createAdminUser();
+  // await createAdminUser();
   connection = nano(`http://${USERNAME}:${PASSWORD}@${HOSTNAME}:${PORT}`);
   await connection.db.create(DATABASE_NAME);
   store = new Expression({
@@ -100,8 +100,8 @@ describe('Getting a specific record and clearing operations', () => {
 after(async () => {
   const dbs = await connection.db.list();
   dbs.forEach(async (db) => await connection.db.destroy(db));
-  await connection.request({
-    path: `/_node/nonode@nohost/_config/admins/${USERNAME}`,
-    method: 'DELETE',
-  });
+  // await connection.request({
+  //   path: `/_node/nonode@nohost/_config/admins/${USERNAME}`,
+  //   method: 'DELETE',
+  // });
 });
