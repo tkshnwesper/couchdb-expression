@@ -6,4 +6,4 @@ node_js:
   - "node"
 
 before_script:
-  - curl -X PUT /_node/nonode@nohost/_config/admins/meow -d '"password"'
+  - curl -X PUT http://127.0.0.1:5984/_node/nonode@nohost/_config/admins/meow -d '"password"'
