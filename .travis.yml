@@ -10,4 +10,4 @@ node_js:
 
 before_install:
   - docker pull couchdb
-  - docker run -p 5984:5984 couchdb
+  - docker run -p 5984:5984 -d couchdb
