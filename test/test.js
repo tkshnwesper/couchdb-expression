@@ -4,24 +4,37 @@ const Expression = require('../src/lib').default(session);
 const chai = require('chai');
 const nano = require('nano');
 
-const USERNAME = '';
-const PASSWORD = '';
+const USERNAME = 'meow';
+const PASSWORD = 'password';
 const HOSTNAME = '127.0.0.1';
 const PORT = 5984;
-const DATABASE_NAME = 'test';
+const DATABASE_NAME = 'sessions';
 
-const connection = nano(`http://${USERNAME}:${PASSWORD}@${HOSTNAME}:${PORT}`);
+let connection = nano(`http://${HOSTNAME}:${PORT}`);
+let store;
 
-const store = new Expression({
-  username: USERNAME,
-  password: PASSWORD,
-  hostname: HOSTNAME,
-  port: PORT,
-  databaseName: DATABASE_NAME
-});
+const createAdminUser = async () => {
+  await connection.request({
+    path: `/_node/nonode@nohost/_config/admins/${USERNAME}`,
+    method: 'PUT',
+    body: PASSWORD,
+    headers: {
+      'content-type': 'text/plain',
+    }
+  });
+};
 
 before(async () => {
+  await createAdminUser();
+  connection = nano(`http://${USERNAME}:${PASSWORD}@${HOSTNAME}:${PORT}`);
   await connection.db.create(DATABASE_NAME);
+  store = new Expression({
+    username: USERNAME,
+    password: PASSWORD,
+    hostname: HOSTNAME,
+    port: PORT,
+    database: DATABASE_NAME
+  });
 });
 
 describe('Retrieving and setting operations', () => {
@@ -85,6 +98,10 @@ describe('Getting a specific record and clearing operations', () => {
 });
 
 after(async () => {
-  await connection.db.destroy('test');
-  await connection.db.destroy('sessions');
+  const dbs = await connection.db.list();
+  dbs.forEach(async (db) => await connection.db.destroy(db));
+  await connection.request({
+    path: `/_node/nonode@nohost/_config/admins/${USERNAME}`,
+    method: 'DELETE',
+  });
 });
