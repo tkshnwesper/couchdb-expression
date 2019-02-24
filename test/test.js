@@ -24,16 +24,26 @@ const createAdminUser = async () => {
   });
 };
 
+const initialValues = {
+  username: USERNAME,
+  password: PASSWORD,
+  hostname: HOSTNAME,
+  port: PORT,
+  database: DATABASE_NAME
+};
+
 before(async () => {
   await createAdminUser();
   connection = nano(`http://${USERNAME}:${PASSWORD}@${HOSTNAME}:${PORT}`);
   await connection.db.create(DATABASE_NAME);
-  store = new Expression({
-    username: USERNAME,
-    password: PASSWORD,
-    hostname: HOSTNAME,
-    port: PORT,
-    database: DATABASE_NAME
+  store = new Expression(initialValues);
+});
+
+describe('Default values', () => {
+  it('uses custom session when none passed to it', () => {
+    const Expression = require('../src/lib').default();
+    new Expression(initialValues);
+    
   });
 });
 
