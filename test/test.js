@@ -1,12 +1,12 @@
 require('@babel/register');
 const session = require('express-session');
 const Expression = require('../src/lib').default(session);
-const chai = require('chai');
+const { assert } = require('chai');
 const nano = require('nano');
 
-const USERNAME = 'meow';
+const USERNAME = 'admin';
 const PASSWORD = 'password';
-const HOSTNAME = '127.0.0.1';
+const HOSTNAME = 'localhost';
 const PORT = 5984;
 const DATABASE_NAME = 'sessions';
 
@@ -42,31 +42,40 @@ before(async () => {
 describe('Default values', () => {
   it('uses custom session when none passed to it', () => {
     const Expression = require('../src/lib').default();
-    new Expression(initialValues);
-    
+    const store = new Expression(initialValues);
+    assert.instanceOf(store, Object);
+  });
+
+  it ('assigns default values if none are passed', () => {
+    const { hostname, password, port, databaseName, username } = new Expression();
+    assert.equal(hostname, HOSTNAME);
+    assert.equal(password, PASSWORD);
+    assert.equal(port, PORT);
+    assert.equal(username, USERNAME);
+    assert.equal(databaseName, DATABASE_NAME);
   });
 });
 
 describe('Retrieving and setting operations', () => {
   it('should get back zero results', (done) => {
     store.all(function (err, docs) {
-      chai.assert.isEmpty(docs);
+      assert.isEmpty(docs);
       done();
     });
   });
 
   it('should return length as zero', (done) => {
     store.length((err, length) => {
-      chai.assert.equal(length, 0);
+      assert.equal(length, 0);
       done();
     });
   });
 
   it('should insert one session into database', (done) => {
     store.set('meow', {}, (err) => {
-      chai.assert.isNull(err);
+      assert.isNull(err);
       store.length((err, length) => {
-        chai.assert.equal(length, 1);
+        assert.equal(length, 1);
         done();
       });
     });
@@ -85,7 +94,7 @@ describe('Getting a specific record and clearing operations', () => {
   it('should clear all sessions in database', (done) => {
     store.clear(() => {
       store.length((err, length) => {
-        chai.assert.equal(length, 0);
+        assert.equal(length, 0);
         done();
       });
     });
@@ -93,15 +102,15 @@ describe('Getting a specific record and clearing operations', () => {
 
   it('should get a specific record', (done) => {
     store.get('meow', (err, doc) => {
-      chai.assert.isNull(err);
-      chai.assert.isNotNull(doc);
+      assert.isNull(err);
+      assert.isNotNull(doc);
       done();
     });
   });
 
   it('should delete a specific session', (done) => {
     store.destroy('meow', (err) => {
-      chai.assert.isNull(err);
+      assert.isNull(err);
       done();
     });
   });

@@ -6,7 +6,7 @@ const error = debug('error');
 
 export default (session) => {
 
-  session = session || {};
+  session = session || Object;
 
   const Store = session.Store || class Store {};
 
@@ -29,8 +29,8 @@ export default (session) => {
 
       this.hostname       = options.hostname    || 'localhost';
       this.port           = options.port        || 5984;
-      this.username       = options.username    || '';
-      this.password       = options.password    || '';
+      this.username       = options.username    || 'admin';
+      this.password       = options.password    || 'password';
       this.databaseName   = options.database    || 'sessions';
       
       this.setErrorCount = 0;
