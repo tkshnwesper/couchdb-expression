@@ -7,7 +7,7 @@
 ## Installing
 
 ```sh
-yarn add couchdb-expression
+npm i couchdb-expression
 ```
 
 ## Usage
