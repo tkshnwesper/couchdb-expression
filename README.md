@@ -20,8 +20,8 @@ const session = require('express-session');
 const Expression = require('couchdb-expression')(session);
 
 const store = new Expression({
-  username: 'root',         // default value = ''
-  password: 'hello123',     // default value = ''
+  username: 'root',         // default value = 'admin'
+  password: 'hello123',     // default value = 'password'
   hostname: 'localhost',    // default value = 'localhost'
   port: '5984',             // default value = 5984
   databaseName: 'sessions'  // default value = 'sessions'
