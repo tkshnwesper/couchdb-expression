@@ -42,6 +42,8 @@ before(async () => {
 
 describe('Default values', () => {
   it('uses custom session when none passed to it', () => {
+    const Expression = require('../src/lib').default();
+    const store = new Expression(initialValues);
     assert.instanceOf(store, Object);
   });
 
