@@ -1,4 +1,5 @@
 require('@babel/register');
+const { spy, stub } = require('sinon');
 const session = require('express-session');
 const Expression = require('../src/lib').default(session);
 const { assert } = require('chai');
@@ -41,8 +42,6 @@ before(async () => {
 
 describe('Default values', () => {
   it('uses custom session when none passed to it', () => {
-    const Expression = require('../src/lib').default();
-    const store = new Expression(initialValues);
     assert.instanceOf(store, Object);
   });
 
@@ -53,6 +52,21 @@ describe('Default values', () => {
     assert.equal(port, PORT);
     assert.equal(username, USERNAME);
     assert.equal(databaseName, DATABASE_NAME);
+  });
+});
+
+describe ('initializing database', () => {
+  it ('shows error if there is a problem in fetching the list of existing databases', () => {
+    const listStub = stub(store.connection.db, 'list');
+    const showErrorSpy = spy(store, 'showError');
+    listStub.callsArgWith(0, {});
+    store.execute(() => {});
+    assert.isTrue(showErrorSpy.calledWith(
+      {},
+      'Error connecting to the database and fetching DB list. Check credentials.'
+    ));
+    showErrorSpy.restore();
+    listStub.restore();
   });
 });
 

@@ -36,44 +36,42 @@ export default (session) => {
       this.setErrorCount = 0;
 
       this.connection = nano(
-        /**
-         * Okay, so this works for me because I've set a username/password
-         * for my instance of CouchDB. Haven't tested for case where username/
-         * password is not set.
-         */
-        `http://${this.username}:${this.password}@${this.hostname}:${this.port}`
+        this.generateConnectionURL()
       );
+    }
 
-      async function initializeDatabase() {
+    async initializeDatabase() {
+      try {
         const db = await new Promise((resolve, reject) => {
-          /**
-           * Gets a list of databases existing on the CouchDB Server
-           */
+        /**
+         * Gets a list of databases existing on the CouchDB Server
+         */
           this.connection.db.list((err, body) => {
             if (err) {
-              info('Error connecting to the database and fetching DB list. Check credentials.');
-              error(err);
+              this.showError(
+                err,
+                'Error connecting to the database and fetching DB list. Check credentials.'
+              );
               reject(err);
             } else {
               if (body.indexOf(this.databaseName) === -1) {
-                /**
-                 * Creates a new database only if it doesn't already exist
-                 */
+              /**
+               * Creates a new database only if it doesn't already exist
+               */
                 this.connection.db.create(this.databaseName, (err) => {
                   if (err) {
-                    info('Error while creating the database.');
-                    error(err);
+                    this.showError(err, 'Error while creating the database.');
                     reject(err);
                   }
                   /**
-                   * Resolves the DB once it has been created
-                   */
+                 * Resolves the DB once it has been created
+                 */
                   resolve(this.connection.db.use(this.databaseName));  
                 });
               } else {
-                /**
-                 * If already exists then it resolves it right away
-                 */
+              /**
+               * If already exists then it resolves it right away
+               */
                 resolve(this.connection.db.use(this.databaseName));
               }
             }
@@ -81,8 +79,19 @@ export default (session) => {
         });
         this.database = db;
         return db;
+      } catch {
+        return Promise.reject('unable to initialize database');
       }
-      this.dbPromise = initializeDatabase.bind(this)();
+      
+    }
+
+    showError(err, message) {
+      info(message);
+      error(err);
+    }
+
+    generateConnectionURL() {
+      return `http://${this.username}:${this.password}@${this.hostname}:${this.port}`;
     }
 
     /**
@@ -99,7 +108,8 @@ export default (session) => {
     execute(fn) {
       this.database ?
         fn(this.database) :
-        this.dbPromise.then(db => fn(db));
+        this.initializeDatabase().then(db => fn(db))
+          .catch(() => error('could not execute function'));
     }
 
     /**
@@ -112,8 +122,7 @@ export default (session) => {
       this.execute(db => {
         db.get(this.sidToCid(sid), (err, doc) => {
           if (err) {
-            info('Attempt to get cookie information from DB failed.');
-            error(err);
+            this.showError(err, 'Attempt to get cookie information from DB failed.');
           }
           callback(err, doc ? doc : null);
         });
@@ -135,8 +144,7 @@ export default (session) => {
         db.insert(session, this.sidToCid(sid), (err) => {
           if (err && this.setErrorCount < 3) {
             this.setErrorCount++;
-            info('Attempt to set cookie in DB failed.');
-            error(err);
+            this.showError(err, 'Attempt to set cookie in DB failed.');
             /**
              * Sometimes due to race-conditions a `Document update conflict`
              * error seems to crop up. This has got to do with CouchDB's internal
@@ -163,8 +171,7 @@ export default (session) => {
       this.get(sid, (err, doc) => (
         this.execute(db => db.destroy(doc._id, doc._rev, (err2) => {
           if (err2) {
-            info('Attempt to destroy the cookie in DB failed.');
-            error(err2);
+            this.showError(err2, 'Attempt to destroy the cookie in DB failed.');
           }
           callback(err2);
         }))
@@ -180,8 +187,10 @@ export default (session) => {
         const docs = [];
         db.list({ include_docs: true }, (err, body) => {
           if (err) {
-            info('Attempt to fetch list of all the cookies failed (in clear method).');
-            error(err);
+            this.showError(
+              err,
+              'Attempt to fetch list of all the cookies failed (in clear method).'
+            );
             callback(err);
           } else {
             body.rows.forEach(doc => (
@@ -189,8 +198,10 @@ export default (session) => {
             ));
             db.bulk({ docs }, (err) => {
               if (err) {
-                info('Attempt to carry out bulk deletion of cookies in DB failed (in clear method).');
-                error(err);
+                this.showError(
+                  err,
+                  'Attempt to carry out bulk deletion of cookies in DB failed (in clear method).'
+                );
               }
               callback(err);
             });
@@ -207,8 +218,10 @@ export default (session) => {
       this.execute(db => (
         db.list((err, body) => {
           if (err) {
-            info('Attempt to fetch the list of all cookies from DB failed (in length method).');
-            error(err);
+            this.showError(
+              err,
+              'Attempt to fetch the list of all cookies from DB failed (in length method).'
+            );
             callback(err, null);
           } else {
             callback(err, body.rows.length);
@@ -225,8 +238,10 @@ export default (session) => {
       this.execute(db => (
         db.list({ include_docs: true }, (err, body) => {
           if (err) {
-            info('Attempt to fetch all cookies from DB failed (in all method).');
-            error(err);
+            this.showError(
+              err,
+              'Attempt to fetch all cookies from DB failed (in all method).'
+            );
             callback(err, null);
           } else {
             callback(err, body.rows.map(r => r.doc));
@@ -255,8 +270,10 @@ export default (session) => {
           }
         }, (err) => {
           if (err) {
-            info('Attempt to touch failed.');
-            error(err);
+            this.showError(
+              err,
+              'Attempt to touch failed.'
+            );
           }
           callback(err);
         });
