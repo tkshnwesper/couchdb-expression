@@ -58,17 +58,61 @@ describe('Default values', () => {
 });
 
 describe ('initializing database', () => {
-  it ('shows error if there is a problem in fetching the list of existing databases', () => {
+  it (
+    'shows error if there is a problem in fetching the list of existing databases',
+    () => {
+      const listStub = stub(store.connection.db, 'list');
+      const showErrorSpy = spy(store, 'showError');
+      listStub.callsArgWith(0, {});
+      store.execute(() => {});
+      assert.isTrue(showErrorSpy.calledWith(
+        {},
+        'Error connecting to the database and fetching DB list. Check credentials.'
+      ));
+      showErrorSpy.restore();
+      listStub.restore();
+    });
+
+  it('creates database if it does not exist', () => {
     const listStub = stub(store.connection.db, 'list');
+    const createSpy = spy(store.connection.db, 'create');
+    listStub.callsArgWith(0, undefined, ['Fake Database Name']);
+    store.execute(() => {});
+    assert.isTrue(createSpy.calledWith(DATABASE_NAME));
+    listStub.restore();
+    createSpy.restore();
+  });
+
+  it('shows error if unable to create database', () => {
+    const listStub = stub(store.connection.db, 'list');
+    const createStub = stub(store.connection.db, 'create');
     const showErrorSpy = spy(store, 'showError');
-    listStub.callsArgWith(0, {});
+    listStub.callsArgWith(0, undefined, ['Fake Database Name']);
+    createStub.callsArgWith(1, {});
     store.execute(() => {});
     assert.isTrue(showErrorSpy.calledWith(
       {},
-      'Error connecting to the database and fetching DB list. Check credentials.'
+      'Error while creating the database.',
     ));
     showErrorSpy.restore();
     listStub.restore();
+    createStub.restore();
+  });
+
+  it('resolves database after creation', async () => {
+    const testStore = new Expression(initialValues);    
+    const listStub = stub(testStore.connection.db, 'list');
+    const createStub = stub(testStore.connection.db, 'create');
+    const useStub = stub(testStore.connection.db, 'use');
+    const returnValue = 'some value';
+    useStub.withArgs(DATABASE_NAME).returns(returnValue);
+    listStub.callsArgWith(0, undefined, ['Fake Database Name']);
+    createStub.callsArgWith(1, undefined);
+    assert.equal(await testStore.initializeDatabase(), returnValue);
+    assert.isTrue(useStub.calledWith(DATABASE_NAME));
+    useStub.restore();
+    listStub.restore();
+    createStub.restore();
   });
 });
 
