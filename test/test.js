@@ -34,6 +34,7 @@ const initialValues = {
 };
 
 before(async () => {
+  this.timeout(5000);
   await createAdminUser();
   connection = nano(`http://${USERNAME}:${PASSWORD}@${HOSTNAME}:${PORT}`);
   await connection.db.create(DATABASE_NAME);
