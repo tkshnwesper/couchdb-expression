@@ -5,6 +5,10 @@ language: node_js
 node_js:
   - "node"
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=ea08b2c9460c9adabc40f8be76ca4f56da6a3b5ef48ea6b99c91db726994b8bc
+
 before_install:
   - docker pull couchdb
   - docker run -p 5984:5984 -d couchdb
