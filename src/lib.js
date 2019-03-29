@@ -2,8 +2,16 @@ import nano from 'nano';
 import chalk from 'chalk';
 
 const { log } = console;
-const info = (message) => log(chalk.blue(message));
-const error = (message) => log(chalk.red(message));
+
+const stringifyMessage = message => {
+  if (typeof(message) === 'object') {
+    return JSON.stringify(message);
+  }
+  return message;
+};
+
+const info = message => log(chalk.cyan(stringifyMessage(message)));
+const error = message => log(chalk.red(stringifyMessage(message)));
 
 export default (session) => {
 
