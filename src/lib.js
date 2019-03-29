@@ -1,8 +1,9 @@
 import nano from 'nano';
-import debug from 'debug';
+import chalk from 'chalk';
 
-const info = debug('info');
-const error = debug('error');
+const { log } = console;
+const info = (message) => log(chalk.blue(message));
+const error = (message) => log(chalk.red(message));
 
 export default (session) => {
 
