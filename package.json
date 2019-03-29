@@ -11,6 +11,9 @@
     "build": "babel src --out-dir lib",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
+  "files": [
+    "/lib"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
