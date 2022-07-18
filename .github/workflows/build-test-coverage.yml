@@ -16,7 +16,7 @@ jobs:
 
     services:
       couchdb:
-        image: couchdb:1.7
+        image: couchdb:2
         ports:
           - 5984:5984
 
