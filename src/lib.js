@@ -41,6 +41,7 @@ export default (session) => {
       this.username       = options.username    || 'admin';
       this.password       = options.password    || 'password';
       this.databaseName   = options.database    || 'sessions';
+      this.https          = options.https       || false;
       
       this.setErrorCount = 0;
 
@@ -100,7 +101,7 @@ export default (session) => {
     }
 
     generateConnectionURL() {
-      return `http://${this.username}:${this.password}@${this.hostname}:${this.port}`;
+      return `${this.https ? 'https' : 'http'}://${this.username}:${this.password}@${this.hostname}:${this.port}`;
     }
 
     /**
