@@ -24,7 +24,7 @@ const store = new Expression({
   password: 'hello123',     // default value = 'password'
   hostname: 'localhost',    // default value = 'localhost'
   port: '5984',             // default value = 5984
-  database: 'sessions'      // default value = 'sessions'
+  database: 'sessions',     // default value = 'sessions'
   https: false              // default value = false
 });
 
