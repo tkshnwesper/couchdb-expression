@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/couchdb-expression.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/couchdb-expression/)
 
-[![Build Status](https://travis-ci.org/tkshnwesper/couchdb-expression.svg?branch=master)](https://travis-ci.org/tkshnwesper/couchdb-expression) [![Coverage Status](https://coveralls.io/repos/github/tkshnwesper/couchdb-expression/badge.svg)](https://coveralls.io/github/tkshnwesper/couchdb-expression) [![npm version](https://badge.fury.io/js/couchdb-expression.svg)](https://badge.fury.io/js/couchdb-expression) [![Known Vulnerabilities](https://snyk.io/test/github/tkshnwesper/couchdb-expression/badge.svg)](https://snyk.io/test/github/tkshnwesper/couchdb-expression) [![Greenkeeper badge](https://badges.greenkeeper.io/tkshnwesper/couchdb-expression.svg)](https://greenkeeper.io/) [![Maintainability](https://api.codeclimate.com/v1/badges/963c0939efe683828797/maintainability)](https://codeclimate.com/github/tkshnwesper/couchdb-expression/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/963c0939efe683828797/test_coverage)](https://codeclimate.com/github/tkshnwesper/couchdb-expression/test_coverage)
+[![Build Status](https://travis-ci.org/tkshnwesper/couchdb-expression.svg?branch=master)](https://travis-ci.org/tkshnwesper/couchdb-expression) [![Coverage Status](https://coveralls.io/repos/github/tkshnwesper/couchdb-expression/badge.svg)](https://coveralls.io/github/tkshnwesper/couchdb-expression) [![npm version](https://badge.fury.io/js/couchdb-expression.svg)](https://badge.fury.io/js/couchdb-expression) [![Known Vulnerabilities](https://snyk.io/test/github/tkshnwesper/couchdb-expression/badge.svg)](https://snyk.io/test/github/tkshnwesper/couchdb-expression) [![Maintainability](https://api.codeclimate.com/v1/badges/963c0939efe683828797/maintainability)](https://codeclimate.com/github/tkshnwesper/couchdb-expression/maintainability)
 
 ## Installing
 
@@ -25,6 +25,7 @@ const store = new Expression({
   hostname: 'localhost',    // default value = 'localhost'
   port: '5984',             // default value = 5984
   database: 'sessions'      // default value = 'sessions'
+  https: false              // default value = false
 });
 
 const app = express();
