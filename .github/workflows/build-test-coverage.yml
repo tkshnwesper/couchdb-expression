@@ -1,7 +1,10 @@
 name: Node.js CI
 
 env:
-  CC_TEST_REPORTER_ID: ea08b2c9460c9adabc40f8be76ca4f56da6a3b5ef48ea6b99c91db726994b8bc
+  COVERALLS_SERVICE_NAME: tkshnwesper/couchdb-expression
+  COVERALLS_GIT_BRANCH: master
+  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
 on:
   push:
@@ -30,11 +33,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
       - run: ./cc-test-reporter before-build
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
       - run: npm run coverage
       - run: ./cc-test-reporter after-build
