@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/couchdb-expression.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/couchdb-expression/)
 
-[![Build Status](https://travis-ci.org/tkshnwesper/couchdb-expression.svg?branch=master)](https://travis-ci.org/tkshnwesper/couchdb-expression) [![Coverage Status](https://coveralls.io/repos/github/tkshnwesper/couchdb-expression/badge.svg)](https://coveralls.io/github/tkshnwesper/couchdb-expression) [![npm version](https://badge.fury.io/js/couchdb-expression.svg)](https://badge.fury.io/js/couchdb-expression) [![Known Vulnerabilities](https://snyk.io/test/github/tkshnwesper/couchdb-expression/badge.svg)](https://snyk.io/test/github/tkshnwesper/couchdb-expression) [![Maintainability](https://api.codeclimate.com/v1/badges/963c0939efe683828797/maintainability)](https://codeclimate.com/github/tkshnwesper/couchdb-expression/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/tkshnwesper/couchdb-expression/badge.svg)](https://coveralls.io/github/tkshnwesper/couchdb-expression) [![npm version](https://badge.fury.io/js/couchdb-expression.svg)](https://badge.fury.io/js/couchdb-expression) [![Known Vulnerabilities](https://snyk.io/test/github/tkshnwesper/couchdb-expression/badge.svg)](https://snyk.io/test/github/tkshnwesper/couchdb-expression) [![Maintainability](https://api.codeclimate.com/v1/badges/963c0939efe683828797/maintainability)](https://codeclimate.com/github/tkshnwesper/couchdb-expression/maintainability)
 
 ## Installing
 
